@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest]
-        python-version: ['3.12']
+        python-version: ['3.12', '3.13']
         architecture: ['x64']
 
     steps:
@@ -45,7 +45,7 @@ jobs:
       run: |
         built_path=Amulet-py_${{ matrix.python-version }}-$RUNNER_OS-${{ matrix.architecture }}.zip
         echo "BUILT_PATH=$built_path" >> $GITHUB_ENV
-        python -m PyInstaller -f -y Amulet.spec
+        python -m PyInstaller -F -y Amulet.spec
         cd dist
         if [ "$RUNNER_OS" == "Windows" ]; then
           7z a $built_path Amulet
