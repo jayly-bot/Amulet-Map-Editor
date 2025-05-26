@@ -10,7 +10,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ${{ matrix.cfg.os }}
+    runs-on: ${{ matrix.os }}
     defaults:
       run:
         shell: bash
@@ -18,16 +18,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        cfg:
-        - {os: windows-latest, python-version: '3.11', architecture: x64}
+        os: [windows-latest]
+        python-version: ['3.9', '3.10', '3.11', '3.12']
+        architecture: ['x64']
 
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.cfg.python-version }} ${{ matrix.cfg.architecture }}
+    - name: Set up Python ${{ matrix.python-version }} ${{ matrix.architecture }}
       uses: actions/setup-python@v5
       with:
-        python-version: ${{ matrix.cfg.python-version }}
-        architecture: ${{ matrix.cfg.architecture }}
+        python-version: ${{ matrix.python-version }}
+        architecture: ${{ matrix.architecture }}
 
     - name: Install dependencies
       run: |
@@ -42,7 +43,7 @@ jobs:
 
     - name: PyInstaller build
       run: |
-        built_path=Amulet-$RUNNER_OS-${{ matrix.cfg.architecture }}.zip
+        built_path=Amulet-$RUNNER_OS-${{ matrix.architecture }}.zip
         echo "BUILT_PATH=$built_path" >> $GITHUB_ENV
         python -m PyInstaller -y Amulet.spec
         cd dist
