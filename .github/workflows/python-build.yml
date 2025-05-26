@@ -4,6 +4,7 @@
 name: Build
 
 on:
+  push:
   release:
     types: [published]
 
@@ -55,15 +56,8 @@ jobs:
         fi
         cd ..
 
-    - name: Publish to PyPi
-      env:
-        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-        TWINE_PASSWORD: ${{ secrets.AMULET_MAP_EDITOR_PYPI_PASSWORD }}
-      run: |
-        twine upload dist/amulet[_-]map[_-]editor* --skip-existing
-
     - name: Upload Release Asset
-      env:
-        GITHUB_TOKEN: ${{ github.TOKEN }}
-      run: |
-        gh release upload ${{github.event.release.tag_name}} ./dist/${{env.BUILT_PATH}}#${{env.BUILT_PATH}}
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.BUILT_PATH }}
+        path: ./dist/${{env.BUILT_PATH}}#${{env.BUILT_PATH}}
