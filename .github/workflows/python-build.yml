@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         cfg:
-        - {os: windows-latest, python-version: '3.9', architecture: x64}
+        - {os: windows-latest, python-version: '3.11', architecture: x64}
 
     steps:
     - uses: actions/checkout@v4
@@ -42,7 +42,7 @@ jobs:
 
     - name: PyInstaller build
       run: |
-        built_path=Amulet-v${{ github.event.release.tag_name }}-$RUNNER_OS-${{ matrix.cfg.architecture }}.zip
+        built_path=Amulet-$RUNNER_OS-${{ matrix.cfg.architecture }}.zip
         echo "BUILT_PATH=$built_path" >> $GITHUB_ENV
         python -m PyInstaller -y Amulet.spec
         cd dist
@@ -60,4 +60,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.BUILT_PATH }}
-        path: ./dist/${{env.BUILT_PATH}}#${{env.BUILT_PATH}}
+        path: ./dist/${{env.BUILT_PATH}}
